@@ -13,6 +13,7 @@ import requests as req
 
 # Create your views here.
 
+
 def signup(request):
     pass
 
@@ -22,9 +23,16 @@ def index(request):
 
 
 def songs(request):
-    # songs = {"songs":[]}
-    # return render(request, "songs.html", {"songs": [insert list here]})
-    pass
+    songs = {
+        "songs": [
+            {
+                "id": 1,
+                "title": "duis faucibus accumsan odio curabitur convallis",
+                "lyrics": "Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis.",
+            }
+        ]
+    }
+    return render(request, "songs.html", {"songs": songs["songs"]})
 
 
 def photos(request):
@@ -32,11 +40,14 @@ def photos(request):
     # return render(request, "photos.html", {"photos": photos})
     pass
 
+
 def login_view(request):
     pass
 
+
 def logout_view(request):
     pass
+
 
 def concerts(request):
     pass
@@ -49,7 +60,15 @@ def concert_detail(request, id):
             status = obj.attendee.filter(user=request.user).first().attending
         except:
             status = "-"
-        return render(request, "concert_detail.html", {"concert_details": obj, "status": status, "attending_choices": ConcertAttending.AttendingChoices.choices})
+        return render(
+            request,
+            "concert_detail.html",
+            {
+                "concert_details": obj,
+                "status": status,
+                "attending_choices": ConcertAttending.AttendingChoices.choices,
+            },
+        )
     else:
         return HttpResponseRedirect(reverse("login"))
     pass
@@ -61,14 +80,17 @@ def concert_attendee(request):
             concert_id = request.POST.get("concert_id")
             attendee_status = request.POST.get("attendee_choice")
             concert_attendee_object = ConcertAttending.objects.filter(
-                concert_id=concert_id, user=request.user).first()
+                concert_id=concert_id, user=request.user
+            ).first()
             if concert_attendee_object:
                 concert_attendee_object.attending = attendee_status
                 concert_attendee_object.save()
             else:
-                ConcertAttending.objects.create(concert_id=concert_id,
-                                                user=request.user,
-                                                attending=attendee_status)
+                ConcertAttending.objects.create(
+                    concert_id=concert_id,
+                    user=request.user,
+                    attending=attendee_status,
+                )
 
         return HttpResponseRedirect(reverse("concerts"))
     else:
