@@ -69,8 +69,11 @@ class Photo(models.Model):
 
 class Song(models.Model):
     # id
+    id = models.IntegerField(primary_key=True)
     # title
+    title = models.CharField(max_length=255)
     # lyrics
+    lyrics = models.TextField()
 
     class Meta:
         managed = False
