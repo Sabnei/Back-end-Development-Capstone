@@ -1,4 +1,5 @@
 from datetime import datetime
+from email.policy import default
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -7,11 +8,16 @@ from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 
+
 class Concert(models.Model):
     # concert_name
+    concert_name = models.CharField(max_length=255)
     # duration
+    duration = models.IntegerField()
     # city
+    city = models.CharField(max_length=255)
     # date
+    date = models.DateField(default=datetime.now)
 
     def __str__(self):
         return self.concert_name
@@ -34,7 +40,7 @@ class ConcertAttending(models.Model):
     )
 
     class Meta:
-        unique_together = ['concert', 'user']
+        unique_together = ["concert", "user"]
 
     def __str__(self):
         return self.attending
